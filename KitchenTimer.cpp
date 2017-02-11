@@ -1,21 +1,7 @@
 #include "KitchenTimer.h"
 
-	uint32_t KitchenTimer::getTime()
-	{
-		if(isStarted() && CurrentMode == TIMER_MODE_STOPWATCH)
-			return (millis() - StartedAt) / 1000;
-		
-		// If the timer has finished, the return sentence will underflow
-		if(CurrentMode == TIMER_MODE_COUNTDOWN)
-		{
-			if(!isStarted() || hasFinished())
-				return Time / 1000;
-
-			return (StartedAt + Time - millis()) / 1000;
-		}
-
-		return 0;
-	}
+	uint8_t KitchenTimer::getCurrentMode()
+	{ return CurrentMode; }
 
 	bool KitchenTimer::isStarted()
 	{ return Started; }
@@ -40,6 +26,23 @@
 			start();
 	}
 
+	uint32_t KitchenTimer::getTime()
+	{
+		if(isStarted() && CurrentMode == TIMER_MODE_STOPWATCH)
+			return (millis() - StartedAt) / 1000;
+		
+		// If the timer has finished, the return sentence will underflow
+		if(CurrentMode == TIMER_MODE_COUNTDOWN)
+		{
+			if(!isStarted() || hasFinished())
+				return Time / 1000;
+
+			return (StartedAt + Time - millis()) / 1000;
+		}
+
+		return 0;
+	}
+
 	uint16_t KitchenTimer::getHours()
 	{ return floor(getTime() / 3600); }
 
@@ -50,13 +53,13 @@
 	{ return floor(getTime() % 60); // Floor?
 	}
 
-	void KitchenTimer::addHours(uint16_t Hours = 1)
+	void KitchenTimer::addHours(uint16_t Hours /* = 1 */)
 	{ addSeconds(Hours * 3600); }
 
-	void KitchenTimer::addMinutes(uint32_t Minutes = 1)
+	void KitchenTimer::addMinutes(uint32_t Minutes /* = 1 */)
 	{ addSeconds(Minutes * 60); }
 
-	void KitchenTimer::addSeconds(uint32_t Seconds = 1)
+	void KitchenTimer::addSeconds(uint32_t Seconds /* = 1 */)
 	{
 		Seconds *= 1000;
 

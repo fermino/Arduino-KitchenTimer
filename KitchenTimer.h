@@ -11,23 +11,26 @@
 
 	class KitchenTimer
 	{
-		public:
-			static const uint8_t TIMER_MODE_STOPWATCH = 0;
-			static const uint8_t TIMER_MODE_COUNTDOWN = 1;
-
+		private:
 			uint8_t CurrentMode = TIMER_MODE_STOPWATCH;
 
 			bool Started = false;
 			uint32_t StartedAt = 0;
 			uint32_t Time = 0;
 
-			uint32_t getTime();
 		public:
+			static const uint8_t TIMER_MODE_STOPWATCH = 0;
+			static const uint8_t TIMER_MODE_COUNTDOWN = 1;
+
+			uint8_t getCurrentMode();
+
 			bool isStarted();
 
 			void start();
 			void stop();
 			void toggle();
+
+			uint32_t getTime();
 
 			uint16_t getHours();
 			uint8_t getMinutes();
