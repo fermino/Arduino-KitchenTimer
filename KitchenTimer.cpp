@@ -8,7 +8,7 @@
 
 	void KitchenTimer::start()
 	{
-		StartedAt = millis();
+		StartedAt = millis() - Time;
 		Started = true;
 	}
 
@@ -28,8 +28,13 @@
 
 	uint32_t KitchenTimer::getTime()
 	{
-		if(isStarted() && CurrentMode == TIMER_MODE_STOPWATCH)
-			return (millis() - StartedAt) / 1000;
+		if(CurrentMode == TIMER_MODE_STOPWATCH)
+		{
+			if(isStarted())
+				Time = millis() - StartedAt;
+
+			return Time / 1000;
+		}
 		
 		// If the timer has finished, the return sentence will underflow
 		if(CurrentMode == TIMER_MODE_COUNTDOWN)
