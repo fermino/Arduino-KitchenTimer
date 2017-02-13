@@ -9,6 +9,9 @@
 		#include "WConstants.h"
 	#endif
 
+	// 99 hours, 59 minutes, 59 seconds
+	#define KITCHENTIMER_TIMELIMIT 359999
+
 	class KitchenTimer
 	{
 		private:

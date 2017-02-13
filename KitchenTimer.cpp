@@ -36,7 +36,12 @@
 		if(getCurrentMode() == TIMER_MODE_STOPWATCH)
 		{
 			if(isStarted())
+			{
 				Time = millis() - StartedAt;
+
+				if(Time >= KITCHENTIMER_TIMELIMIT)
+					Time = KITCHENTIMER_TIMELIMIT;
+			}
 
 			return Time / 1000;
 		}
@@ -73,7 +78,7 @@
 		Seconds *= 1000;
 
 		// Prevent buffer overflow
-		if(Time > 0 && Seconds > 0xFFFFFFFF - Time)
+		if(Time > 0 && Seconds > 0xFFFFFFFF - Time && Time + Seconds <= KITCHENTIMER_TIMELIMIT)
 			return;
 
 		Time += Seconds;
