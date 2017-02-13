@@ -11,7 +11,7 @@
 
 	void KitchenTimer::start()
 	{
-		StartedAt = millis - (getCurrentMode() == TIMER_MODE_STOPWATCH ? Time : 0);
+		StartedAt = millis() - (getCurrentMode() == TIMER_MODE_STOPWATCH ? Time : 0);
 
 		Status |= _BV(1);
 	}
