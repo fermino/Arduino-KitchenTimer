@@ -1,20 +1,25 @@
 #include "KitchenTimer.h"
 
 	uint8_t KitchenTimer::getCurrentMode()
-	{ return CurrentMode; }
+	{ return Status & _BV(0); }
+
+	void KitchenTimer::setCurrentMode(uint8_t Mode)
+	{ Status ^= (-Mode ^ Status) & _BV(0); }
 
 	bool KitchenTimer::isStarted()
-	{ return Started; }
+	{ return Status & 0b10; }
 
 	void KitchenTimer::start()
 	{
-		StartedAt = millis() - Time;
-		Started = true;
+		StartedAt = millis - (getCurrentMode() == TIMER_MODE_STOPWATCH ? Time : 0);
+
+		Status |= _BV(1);
 	}
 
 	void KitchenTimer::stop()
 	{
-		Started = false;
+		Status &= ~_BV(1);
+
 		StartedAt = 0;
 	}
 
@@ -28,7 +33,7 @@
 
 	uint32_t KitchenTimer::getTime()
 	{
-		if(CurrentMode == TIMER_MODE_STOPWATCH)
+		if(getCurrentMode() == TIMER_MODE_STOPWATCH)
 		{
 			if(isStarted())
 				Time = millis() - StartedAt;
@@ -37,7 +42,7 @@
 		}
 		
 		// If the timer has finished, the return sentence will underflow
-		if(CurrentMode == TIMER_MODE_COUNTDOWN)
+		if(getCurrentMode() == TIMER_MODE_COUNTDOWN)
 		{
 			if(!isStarted() || hasFinished())
 				return Time / 1000;
@@ -55,8 +60,7 @@
 	{ return floor(getTime() % 3600 / 60); }
 
 	uint8_t KitchenTimer::getSeconds()
-	{ return floor(getTime() % 60); // Floor?
-	}
+	{ return getTime() % 60; }
 
 	void KitchenTimer::addHours(uint16_t Hours /* = 1 */)
 	{ addSeconds(Hours * 3600); }
@@ -75,7 +79,7 @@
 		Time += Seconds;
 
 		// If the user added some time, we can think that he wants a countdown!
-		CurrentMode = TIMER_MODE_COUNTDOWN;
+		setCurrentMode(TIMER_MODE_COUNTDOWN);
 	}
 
 	void KitchenTimer::reset()
@@ -85,12 +89,12 @@
 		Time = 0;
 
 		// If the user adds time, this ill be changed, else, it will count up
-		CurrentMode = TIMER_MODE_STOPWATCH;
+		setCurrentMode(TIMER_MODE_STOPWATCH);
 	}
 
 	bool KitchenTimer::hasFinished()
 	{
-		if(isStarted() && CurrentMode == TIMER_MODE_COUNTDOWN)
+		if(isStarted() && getCurrentMode() == TIMER_MODE_COUNTDOWN)
 			return millis() >= StartedAt + Time;
 
 		return false;

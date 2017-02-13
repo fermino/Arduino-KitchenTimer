@@ -12,12 +12,13 @@
 	class KitchenTimer
 	{
 		private:
-			uint8_t CurrentMode = TIMER_MODE_STOPWATCH;
+			// Bit 1 stores Started, and bit 0 CurrentMode
+			byte Status = (false << 1) | (TIMER_MODE_STOPWATCH);
 
-			bool Started = false;
 			uint32_t StartedAt = 0;
 			uint32_t Time = 0;
 
+			void setCurrentMode(uint8_t Mode);
 		public:
 			static const uint8_t TIMER_MODE_STOPWATCH = 0;
 			static const uint8_t TIMER_MODE_COUNTDOWN = 1;
