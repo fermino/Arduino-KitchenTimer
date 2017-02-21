@@ -5,12 +5,10 @@
 		#include "Arduino.h"
 	#else
 		#include "WProgram.h"
-		#include "pins_arduino.h"
-		#include "WConstants.h"
 	#endif
 
 	// 99 hours, 59 minutes, 59 seconds
-	#define KITCHENTIMER_TIMELIMIT 359999
+	#define KITCHENTIMER_TIMELIMIT 359999000
 
 	class KitchenTimer
 	{
