@@ -78,7 +78,7 @@
 		Seconds *= 1000;
 
 		// Prevent buffer overflow
-		if(Time > 0 && Seconds > 0xFFFFFFFF - Time && Time + Seconds <= KITCHENTIMER_TIMELIMIT)
+		if((Time > 0) && (Seconds > (0xFFFFFFFF - Time)) && ((Time + Seconds) > KITCHENTIMER_TIMELIMIT))
 			return;
 
 		Time += Seconds;
